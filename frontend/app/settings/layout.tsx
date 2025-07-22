@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  Briefcase,
-  Building,
+  // Briefcase,
+  // Building,
   ChevronLeft,
-  CreditCard,
-  Landmark,
-  PieChart,
-  ScrollText,
-  UserCircle2,
+  // CreditCard,
+  // Landmark,
+  // PieChart,
+  // ScrollText,
+  // UserCircle2,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,60 +28,61 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useCurrentUser } from "@/global";
-import type { CurrentUser } from "@/models/user";
+import { getNavCompanySettings, getNavPersonalSettings } from "@/lib/navLinks";
+// import type { CurrentUser } from "@/models/user";
 
-const personalLinks = [
-  {
-    label: "Profile",
-    route: "/settings" as const,
-    icon: UserCircle2,
-    isVisible: (_user: CurrentUser) => true,
-  },
-  {
-    label: "Payouts",
-    route: "/settings/payouts" as const,
-    icon: Landmark,
-    isVisible: (user: CurrentUser) => !!user.roles.worker || !!user.roles.investor,
-  },
-  {
-    label: "Tax information",
-    route: "/settings/tax" as const,
-    icon: ScrollText,
-    isVisible: (user: CurrentUser) => !!user.roles.worker || !!user.roles.investor,
-  },
-];
+// const personalLinks = [
+//   {
+//     label: "Profile",
+//     route: "/settings" as const,
+//     icon: UserCircle2,
+//     isVisible: (_user: CurrentUser) => true,
+//   },
+//   {
+//     label: "Payouts",
+//     route: "/settings/payouts" as const,
+//     icon: Landmark,
+//     isVisible: (user: CurrentUser) => !!user.roles.worker || !!user.roles.investor,
+//   },
+//   {
+//     label: "Tax information",
+//     route: "/settings/tax" as const,
+//     icon: ScrollText,
+//     isVisible: (user: CurrentUser) => !!user.roles.worker || !!user.roles.investor,
+//   },
+// ];
 
-const companyLinks = [
-  {
-    label: "Workspace settings",
-    route: "/settings/administrator" as const,
-    icon: Building,
-    isVisible: (user: CurrentUser) => !!user.roles.administrator,
-  },
-  {
-    label: "Company details",
-    route: "/settings/administrator/details" as const,
-    icon: Briefcase,
-    isVisible: (user: CurrentUser) => !!user.roles.administrator,
-  },
-  {
-    label: "Billing",
-    route: "/settings/administrator/billing" as const,
-    icon: CreditCard,
-    isVisible: (user: CurrentUser) => !!user.roles.administrator,
-  },
-  {
-    label: "Equity value",
-    route: "/settings/administrator/equity" as const,
-    icon: PieChart,
-    isVisible: (user: CurrentUser) => !!user.roles.administrator,
-  },
-];
+// const companyLinks = [
+//   {
+//     label: "Workspace settings",
+//     route: "/settings/administrator" as const,
+//     icon: Building,
+//     isVisible: (user: CurrentUser) => !!user.roles.administrator,
+//   },
+//   {
+//     label: "Company details",
+//     route: "/settings/administrator/details" as const,
+//     icon: Briefcase,
+//     isVisible: (user: CurrentUser) => !!user.roles.administrator,
+//   },
+//   {
+//     label: "Billing",
+//     route: "/settings/administrator/billing" as const,
+//     icon: CreditCard,
+//     isVisible: (user: CurrentUser) => !!user.roles.administrator,
+//   },
+//   {
+//     label: "Equity value",
+//     route: "/settings/administrator/equity" as const,
+//     icon: PieChart,
+//     isVisible: (user: CurrentUser) => !!user.roles.administrator,
+//   },
+// ];
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   const user = useCurrentUser();
   const pathname = usePathname();
-  const filteredPersonalLinks = personalLinks.filter((link) => link.isVisible(user));
-  const filteredCompanyLinks = companyLinks.filter((link) => link.isVisible(user));
+  const filteredPersonalLinks = getNavPersonalSettings(user, pathname);
+  const filteredCompanyLinks = getNavCompanySettings(user, pathname);
 
   return (
     <SidebarProvider>
